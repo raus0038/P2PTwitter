@@ -70,7 +70,7 @@ public class Profile {
 				peer = "peer" + i;
 			}
 			
-			peer = "peer" + participants.length + 1;
+			peer = "peer" + (participants.length + 1);
 			
 			properties.setProperty("participants", participantList + peer + ",");
 		}
