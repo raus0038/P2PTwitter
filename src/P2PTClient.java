@@ -21,11 +21,15 @@ public class P2PTClient implements Runnable {
 	InetAddress group;
 	int peerDiscoveryTimer;
 	long startTime;
+	
+	Communication peerBroadcast;
 
 	public P2PTClient(String unikey) throws IOException {
 		
 		peerDiscoveryTimer = 1000;
 		startTime = System.currentTimeMillis();
+		
+	
 		
 		try {
 			try {
@@ -41,6 +45,8 @@ public class P2PTClient implements Runnable {
 			sendBuffer = this.unikey.getBytes();
 			packet = new DatagramPacket(sendBuffer, sendBuffer.length, group,
 					port);
+			
+			peerBroadcast = new Communication(unikey, peerDiscoveryTimer, startTime, socket, packet, port, group);
 
 		} catch (SocketException e) {
 			e.printStackTrace();
@@ -52,6 +58,8 @@ public class P2PTClient implements Runnable {
 
 		InputStreamReader fileInputStream = new InputStreamReader(System.in);
 		BufferedReader bufferedReader = new BufferedReader(fileInputStream);
+		
+		peerBroadcast.start();
 
 		try {
 			socket.send(packet);
@@ -63,11 +71,6 @@ public class P2PTClient implements Runnable {
 
 		try {
 			while (true) {
-				
-				if(System.currentTimeMillis() - startTime > peerDiscoveryTimer) {
-					peerBroadcast();
-					System.out.println("BROADCASTED");
-				}
 
 				System.out.print("Status: ");
 
@@ -83,7 +86,7 @@ public class P2PTClient implements Runnable {
 					sendTweet(tweet);
 
 					try {
-						Thread.sleep(100);
+						Thread.sleep(500);
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -124,13 +127,5 @@ public class P2PTClient implements Runnable {
 
 	}
 	
-	private void peerBroadcast() throws IOException {
-		startTime = System.currentTimeMillis();
-		sendBuffer = this.unikey.getBytes();
-		packet = new DatagramPacket(sendBuffer, sendBuffer.length, group,
-				port);
-		socket.send(packet);
-		sendBuffer = new byte[256];
-	}
 
 }

@@ -2,6 +2,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -71,7 +72,7 @@ public class Profile {
 			}
 			
 			peer = "peer" + (participants.length + 1);
-			
+	
 			properties.setProperty("participants", participantList + peer + ",");
 		}
 		else {
@@ -81,6 +82,9 @@ public class Profile {
 		
 		properties.setProperty(peer + ".ip", address.toString().replace("/", ""));
 		properties.setProperty(peer + ".unikey" , key);
+		
+		PrintWriter clearFile = new PrintWriter("participants.properties");
+		clearFile.close();
 		
 		
 		properties.store(output, null);
