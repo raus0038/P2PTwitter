@@ -26,7 +26,7 @@ public class P2PTClient implements Runnable {
 
 	public P2PTClient(String unikey) throws IOException {
 		
-		peerDiscoveryTimer = 1000;
+		peerDiscoveryTimer = 5000;
 		startTime = System.currentTimeMillis();
 		
 	
