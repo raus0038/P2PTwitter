@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 
 public class P2PTClient implements Runnable {
 
+	int a;
 	int port;
 	String unikey;
 	InetAddress address;
