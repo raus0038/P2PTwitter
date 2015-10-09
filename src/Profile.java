@@ -12,6 +12,8 @@ public class Profile {
 	
 	static final Properties properties = new Properties();
 	static String participantList;
+	static String unikeyList;
+	
 	static String[] participants;
 	
 	static String fileName;
@@ -44,27 +46,31 @@ public class Profile {
 		}
 	}
 
-	public static void getProperties(String unikey) {
-
-	}
 
 	public synchronized static void addParticipant(String key, InetAddress address) throws IOException {
 
 		participantList = properties.getProperty("participants");
-		String peer;
+		
+		String peer = "peer";
 
 		if (participantList != null) {
 			
+			int i = 1;
+			
 			participants = participantList.split(",");
 
-			peer = "peer" + (participants.length + 1);
-			for (String s : participants) {
-				if (s.equalsIgnoreCase(key)) {
+			peer = "peer" + i;
+	
+			while (properties.getProperty(peer + ".unikey") != null) {
+				unikeyList = properties.getProperty(peer + ".unikey");
+				if (key.equalsIgnoreCase(unikeyList)) {
 					return;
 				}
+				++i;
+				peer = "peer" + i;
 			}
 			
-			
+			peer = "peer" + participants.length + 1;
 			
 			properties.setProperty("participants", participantList + peer + ",");
 		}
