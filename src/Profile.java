@@ -26,6 +26,8 @@ public class Profile {
 	static ArrayList<String> currentTweets;
 	static ArrayList<String> IP;
 	static ArrayList<String> unikeys;
+	static ArrayList<Long> lastActive;
+	
 	
 
 	public static void load() {
@@ -41,6 +43,7 @@ public class Profile {
 			currentTweets = new ArrayList<String>();
 			unikeys = new ArrayList<String>();
 			IP = new ArrayList<String>();
+			lastActive = new ArrayList<Long>();
 			
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -91,7 +94,8 @@ public class Profile {
 		
 		IP.add(address.getHostAddress());
 		unikeys.add(key);
-		currentTweets.add("Not Initialized");
+		currentTweets.add("-1");
+		lastActive.add((long) System.currentTimeMillis());
 	
 
 	}

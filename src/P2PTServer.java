@@ -53,14 +53,17 @@ public class P2PTServer implements Runnable {
 				
 				
 				else if (key.length()  > 8) {
-					String[] message = key.split(":");
+					String[] message = key.split(":", 2);
 					
 					String unikey = message[0];
 					String tweet = message[1];
 					
+					tweet = tweet.replace("\\:", ":");
+					
 					for(int i = 0; i < Profile.unikeys.size(); i++) {
 						if(Profile.unikeys.get(i).equalsIgnoreCase(unikey)) {
 							Profile.currentTweets.set(i, tweet);
+							Profile.lastActive.set(i, System.currentTimeMillis());
 						}
 					}
 					

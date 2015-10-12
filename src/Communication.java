@@ -43,7 +43,7 @@ public class Communication extends Thread {
 
 	private void peerBroadcast() throws IOException {
 		currentTime = System.currentTimeMillis();
-		sendBuffer = this.unikey.getBytes();
+		sendBuffer = this.unikey.getBytes("ISO-8859-1");
 		packet = new DatagramPacket(sendBuffer, sendBuffer.length, group, port);
 		socket.send(packet);
 		sendBuffer = new byte[256];
