@@ -13,18 +13,19 @@ public class P2PTClient implements Runnable {
 
 	int a;
 	int port;
-	String unikey;
-	InetAddress address;
-	DatagramSocket socket = null;
-	DatagramPacket packet;
-	byte[] sendBuffer = new byte[256];
-	String tweet;
-	InetAddress group;
+	int messageTimer;
 	int peerDiscoveryTimer;
 	long startTime;
 	long peerActiveTimer;
-	int messageTimer;
+	String unikey;
+	String tweet;
+	InetAddress address;
+	InetAddress group;
+	DatagramSocket socket = null;
+	DatagramPacket packet;
+	byte[] sendBuffer = new byte[256];
 	Random timeGenerator;
+	boolean inputEntered;
 
 	Communication peerBroadcast;
 
@@ -120,6 +121,9 @@ public class P2PTClient implements Runnable {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		finally {
+			socket.close();
+		}
 
 	}
 
@@ -134,7 +138,6 @@ public class P2PTClient implements Runnable {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
