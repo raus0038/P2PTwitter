@@ -125,9 +125,9 @@ public class P2PTClient implements Runnable {
 		for (int i = 0; i < Profile.unikeys.size(); i++) {
 			if (!Profile.currentTweets.get(i).equalsIgnoreCase("-1")) {
 				if (!Profile.unikeys.get(i).equalsIgnoreCase(unikey)) {
-					if (peerActiveTimer - Profile.lastActive.get(i) < 10) {
+					if (peerActiveTimer - Profile.lastActive.get(i) < 10000) {
 						System.out.println("# " + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i) + ") : " + Profile.currentTweets.get(i));
-					} else if (peerActiveTimer - Profile.lastActive.get(i) < 20) {
+					} else if (peerActiveTimer - Profile.lastActive.get(i) < 20000) {
 						System.out.println("# [" + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i) + ") : " + "idle]");
 					} else {
 						continue;
