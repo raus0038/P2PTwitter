@@ -83,6 +83,9 @@ public class P2PTServer implements Runnable {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
+			finally {
+				socket.close();
+			}
 		}
 
 	}
