@@ -1,35 +1,25 @@
 import java.io.IOException;
 import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
-import java.net.MulticastSocket;
 import java.net.SocketException;
-import java.net.UnknownHostException;
 
 public class P2PTServer implements Runnable {
 
-	MulticastSocket socket;
+	DatagramSocket socket;
 	DatagramPacket packet;
 	byte[] buffer;
 	InetAddress address;
 	String key;
 	String unikey;
-	InetAddress group;
 
 	public P2PTServer(String unikey) throws IOException {
 		try {
 			this.unikey = unikey;
-			socket = new MulticastSocket(7014);
+			socket = new DatagramSocket(7014);
 			buffer = new byte[256];
 			packet = new DatagramPacket(buffer, buffer.length);
-			try {
-				group = InetAddress.getByName("224.0.0.255");
-			} catch (UnknownHostException e) {
-				e.printStackTrace();
-			}
-			
-			socket.joinGroup(group);
-			
-			
+
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
@@ -40,40 +30,25 @@ public class P2PTServer implements Runnable {
 
 		while (true) {
 			try {
-				
-			
+
 				socket.receive(packet);
-			
-			
+
 				key = new String(buffer, 0, packet.getLength());
-				
-				if(key.length() == 8) {
-					Profile.addParticipant(key, packet.getAddress());
-				}
-				
-				
-				else if (key.length()  > 8) {
-					String[] message = key.split(":", 2);
-					
-					String unikey = message[0];
-					String tweet = message[1];
-					
-					tweet = tweet.replace("\\:", ":");
-					
-					for(int i = 0; i < Profile.unikeys.size(); i++) {
-						if(Profile.unikeys.get(i).equalsIgnoreCase(unikey)) {
-							Profile.currentTweets.set(i, tweet);
-							Profile.lastActive.set(i, System.currentTimeMillis());
-						}
+
+				String[] message = key.split(":", 2);
+
+				String unikey = message[0];
+				String tweet = message[1];
+
+				tweet = tweet.replace("\\:", ":");
+
+				for (int i = 0; i < Profile.unikeys.size(); i++) {
+					if (Profile.unikeys.get(i).equalsIgnoreCase(unikey)) {
+						Profile.currentTweets.set(i, tweet);
+						Profile.lastActive.set(i, System.currentTimeMillis());
 					}
-					
-					
 				}
 
-				
-				
-				
-				
 				try {
 					Thread.sleep(100);
 				} catch (InterruptedException e) {
@@ -82,10 +57,7 @@ public class P2PTServer implements Runnable {
 
 			} catch (IOException e) {
 				e.printStackTrace();
-			}
-			finally {
-				socket.close();
-			}
+			} 
 		}
 
 	}
