@@ -23,6 +23,7 @@ public class P2PTClient implements Runnable {
 	byte[] sendBuffer = new byte[256];
 	Random timeGenerator;
 	boolean inputEntered;
+	String data;
 
 	Communication peerBroadcast;
 
@@ -31,6 +32,7 @@ public class P2PTClient implements Runnable {
 		peerActiveTimer = System.currentTimeMillis();
 		messageTimer = 0;
 		timeGenerator = new Random();
+		data = null;
 
 		try {
 
@@ -50,6 +52,8 @@ public class P2PTClient implements Runnable {
 
 		InputStreamReader fileInputStream = new InputStreamReader(System.in);
 		BufferedReader bufferedReader = new BufferedReader(fileInputStream);
+		messageTimer = timeGenerator.nextInt((3000 - 1000) + 1) + 1000;
+		long previousTime = System.currentTimeMillis();
 
 		System.out.print("Status: ");
 		try {
@@ -59,7 +63,9 @@ public class P2PTClient implements Runnable {
 
 				if (bufferedReader.ready()) {
 
-					String data = bufferedReader.readLine();
+					data = bufferedReader.readLine();
+					
+					previousTime = System.currentTimeMillis();
 
 					String processedData = data.replace(":", "\\:");
 
@@ -81,15 +87,13 @@ public class P2PTClient implements Runnable {
 					}
 
 				} else {
-					messageTimer = timeGenerator.nextInt((3000 - 1000) + 1) + 1000;
-					try {
-						Thread.sleep(messageTimer);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
+					
+					if(System.currentTimeMillis() - previousTime > messageTimer) {
+						printTweets();
+						System.out.println("Status:");
+						previousTime = System.currentTimeMillis();
 					}
-					printTweets();
 				}
-				System.out.println("Status:");
 			}
 
 		} catch (IOException e) {
@@ -126,17 +130,31 @@ public class P2PTClient implements Runnable {
 			if (!Profile.currentTweets.get(i).equalsIgnoreCase("-1")) {
 				if (!Profile.unikeys.get(i).equalsIgnoreCase(unikey)) {
 					if (peerActiveTimer - Profile.lastActive.get(i) < 10000) {
-						System.out.println("# " + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i) + ") : " + Profile.currentTweets.get(i));
+						System.out.println("# " + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i) + "): "
+								+ Profile.currentTweets.get(i));
 					} else if (peerActiveTimer - Profile.lastActive.get(i) < 20000) {
-						System.out.println("# [" + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i) + ") : " + "idle]");
+						System.out.println(
+								"# [" + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i) + "): " + "idle]");
 					} else {
 						continue;
 					}
 				} else {
-					System.out.println("# " + Profile.pseudos.get(i) + " (myself) : " + Profile.currentTweets.get(i));
+					System.out.println("# " + Profile.pseudos.get(i) + " (myself): " + Profile.currentTweets.get(i));
 				}
 			} else {
-				System.out.println("# [" + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i) + ") : " + "not yet initialized]");
+				if (!Profile.unikeys.get(i).equalsIgnoreCase(unikey)) {
+					if (peerActiveTimer - Profile.lastActive.get(i) < 10000) {
+						System.out.println("# [" + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i)
+								+ "): not yet initialized]");
+					} else if (peerActiveTimer - Profile.lastActive.get(i) < 20000) {
+						System.out.println(
+								"# [" + Profile.pseudos.get(i) + " (" + Profile.unikeys.get(i) + "): " + "idle]");
+					} else {
+						continue;
+					}
+				} else {
+					System.out.println("# [" + Profile.pseudos.get(i) + " (myself): not yet initialized]");
+				}
 			}
 		}
 
