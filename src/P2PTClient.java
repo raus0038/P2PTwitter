@@ -84,6 +84,7 @@ public class P2PTClient implements Runnable {
 						}
 
 						printTweets();
+						System.out.println("Status:");
 					}
 
 				} else {
@@ -92,6 +93,7 @@ public class P2PTClient implements Runnable {
 						printTweets();
 						System.out.println("Status:");
 						previousTime = System.currentTimeMillis();
+						messageTimer = timeGenerator.nextInt((3000 - 1000) + 1) + 1000;
 					}
 				}
 			}
