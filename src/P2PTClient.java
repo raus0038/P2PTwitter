@@ -60,7 +60,7 @@ public class P2PTClient implements Runnable {
 		messageTimer = timeGenerator.nextInt((3000 - 1000) + 1) + 1000;
 		long previousTime = System.currentTimeMillis();
 
-		System.out.println("Status:");
+		System.out.print("Status:");
 		try {
 			while (true) {
 
@@ -75,10 +75,10 @@ public class P2PTClient implements Runnable {
 					// Message Validation
 					if (data.equalsIgnoreCase("")) {
 						System.out.println("Status is empty. Retry.");
-						System.out.println("Status:");
+						System.out.print("Status:");
 					} else if (data.length() > 140) {
 						System.out.println("Status is too long, 140 characters max. Retry.");
-						System.out.println("Status:");
+						System.out.print("Status:");
 					} else {
 						
 						// Encode colons in the message to distinguish from colon seperator
@@ -96,7 +96,7 @@ public class P2PTClient implements Runnable {
 
 						printTweets();
 						
-						System.out.println("Status:");
+						System.out.print("Status:");
 					}
 
 				} else {
