@@ -17,7 +17,7 @@ public class P2PTServer implements Runnable {
 		try {
 			this.unikey = unikey;
 			socket = new DatagramSocket(7014);
-			buffer = new byte[256];
+			buffer = new byte[1024];
 			packet = new DatagramPacket(buffer, buffer.length);
 
 		} catch (SocketException e) {

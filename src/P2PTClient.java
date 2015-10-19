@@ -20,7 +20,7 @@ public class P2PTClient implements Runnable {
 	InetAddress address;
 	DatagramSocket socket = null;
 	DatagramPacket packet;
-	byte[] sendBuffer = new byte[256];
+	byte[] sendBuffer = new byte[1024];
 	Random timeGenerator;
 	boolean inputEntered;
 	String data;
@@ -41,7 +41,7 @@ public class P2PTClient implements Runnable {
 			address = InetAddress.getLocalHost();
 			port = 7014;
 			socket = new DatagramSocket();
-			sendBuffer = new byte[256];
+			sendBuffer = new byte[1024];
 
 		} catch (SocketException e) {
 			e.printStackTrace();
