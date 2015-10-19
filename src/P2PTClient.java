@@ -24,6 +24,7 @@ public class P2PTClient implements Runnable {
 	Random timeGenerator;
 	boolean inputEntered;
 	String data;
+	String processedData;
 
 	Communication peerBroadcast;
 
@@ -33,6 +34,8 @@ public class P2PTClient implements Runnable {
 		messageTimer = 0;
 		timeGenerator = new Random();
 		data = null;
+		processedData = null;
+		tweet = null;
 
 		try {
 
@@ -64,10 +67,10 @@ public class P2PTClient implements Runnable {
 				if (bufferedReader.ready()) {
 
 					data = bufferedReader.readLine();
-					
+
 					previousTime = System.currentTimeMillis();
 
-					String processedData = data.replace(":", "\\:");
+					processedData = data.replace(":", "\\:");
 
 					if (data.equalsIgnoreCase("")) {
 						System.out.println("Status is empty. Retry.");
@@ -88,8 +91,11 @@ public class P2PTClient implements Runnable {
 					}
 
 				} else {
-					
-					if(System.currentTimeMillis() - previousTime > messageTimer) {
+
+					if (System.currentTimeMillis() - previousTime > messageTimer) {
+						if (tweet != null) {
+							sendTweet(tweet);
+						}
 						printTweets();
 						System.out.println("Status:");
 						previousTime = System.currentTimeMillis();
