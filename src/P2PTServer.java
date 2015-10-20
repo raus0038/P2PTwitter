@@ -39,7 +39,8 @@ public class P2PTServer implements Runnable {
 				 */
 				
 				socket.receive(packet);
-
+				
+			
 				key = new String(buffer, 0, packet.getLength());
 
 				String[] message = key.split(":", 2);

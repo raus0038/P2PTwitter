@@ -72,15 +72,15 @@ public class P2PTClient implements Runnable {
 
 					previousTime = System.currentTimeMillis();
 					
-					// Encode colons in the message to distinguish from colon seperator
-					processedData = data.replace(":", "\\:");
-					
 					// Message Validation
 					if (data.equalsIgnoreCase("")) {
 						System.out.println("Status is empty. Retry.");
 					} else if (data.length() > 140) {
 						System.out.println("Status is too long, 140 characters max. Retry.");
 					} else {
+						
+						// Encode colons in the message to distinguish from colon seperator
+						processedData = data.replace(":", "\\:");
 						
 						// Send Tweet, then print all current tweets
 						tweet = unikey + ":" + processedData;
@@ -98,13 +98,11 @@ public class P2PTClient implements Runnable {
 
 				} else {
 					
-					// Automatically send current tweet and display all tweets after a given time has passed
+					// Automatically send current tweet after a given time has passed
 					if (System.currentTimeMillis() - previousTime > messageTimer) {
 						if (tweet != null) {
 							sendTweet(tweet);
 						}
-						printTweets();
-						System.out.println("Status:");
 						previousTime = System.currentTimeMillis();
 						messageTimer = timeGenerator.nextInt((3000 - 1000) + 1) + 1000;
 					}
