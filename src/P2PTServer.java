@@ -52,8 +52,13 @@ public class P2PTServer implements Runnable {
 
 				for (int i = 0; i < Profile.unikeys.size(); i++) {
 					if (Profile.unikeys.get(i).equalsIgnoreCase(unikey)) {
+						
+						if(!Profile.currentTweets.get(i).equalsIgnoreCase(tweet)) {
+							Profile.lastActive.set(i, System.currentTimeMillis());
+						}
+						
 						Profile.currentTweets.set(i, tweet);
-						Profile.lastActive.set(i, System.currentTimeMillis());
+					
 					}
 				}
 
