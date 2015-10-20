@@ -26,8 +26,6 @@ public class P2PTClient implements Runnable {
 	String data;
 	String processedData;
 
-	Communication peerBroadcast;
-
 	public P2PTClient(String unikey) throws IOException {
 
 		peerActiveTimer = System.currentTimeMillis();
@@ -52,6 +50,10 @@ public class P2PTClient implements Runnable {
 
 	@Override
 	public void run() {
+		
+		/*
+		 * messageTimer gets randomized for each time the tweets automatically display
+		 */
 
 		InputStreamReader fileInputStream = new InputStreamReader(System.in);
 		BufferedReader bufferedReader = new BufferedReader(fileInputStream);
@@ -69,14 +71,18 @@ public class P2PTClient implements Runnable {
 					data = bufferedReader.readLine();
 
 					previousTime = System.currentTimeMillis();
-
+					
+					// Encode colons in the message to distinguish from colon seperator
 					processedData = data.replace(":", "\\:");
-
+					
+					// Message Validation
 					if (data.equalsIgnoreCase("")) {
 						System.out.println("Status is empty. Retry.");
 					} else if (data.length() > 140) {
 						System.out.println("Status is too long, 140 characters max. Retry.");
 					} else {
+						
+						// Send Tweet, then print all current tweets
 						tweet = unikey + ":" + processedData;
 						sendTweet(tweet);
 
@@ -91,7 +97,8 @@ public class P2PTClient implements Runnable {
 					}
 
 				} else {
-
+					
+					// Automatically send current tweet and display all tweets after a given time has passed
 					if (System.currentTimeMillis() - previousTime > messageTimer) {
 						if (tweet != null) {
 							sendTweet(tweet);
@@ -115,6 +122,9 @@ public class P2PTClient implements Runnable {
 	private void sendTweet(String tweet) throws IOException {
 
 		try {
+			
+			// Iterate through participant IP's to send tweets
+			
 			sendBuffer = tweet.getBytes("ISO-8859-1");
 
 			for (int i = 0; i < Profile.IP.size(); i++) {
@@ -132,6 +142,10 @@ public class P2PTClient implements Runnable {
 	}
 
 	private void printTweets() {
+		
+		
+		// Control flow to print appropriate messages given active time and whether the message if from the user themself
+		
 		System.out.println("### P2P Tweets ###");
 
 		for (int i = 0; i < Profile.unikeys.size(); i++) {

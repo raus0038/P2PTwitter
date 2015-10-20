@@ -30,11 +30,17 @@ public class P2PTServer implements Runnable {
 
 		while (true) {
 			try {
-
+				
+				
+				/*
+				 * Receive a datagram packet, retrieve the string contained within the packet, 
+				 * split it using the first colon as an anchor point, decode any following colons in the message and 
+				 * update the current tweet and active time of the sender
+				 */
+				
 				socket.receive(packet);
 
 				key = new String(buffer, 0, packet.getLength());
-				System.out.println(key);
 
 				String[] message = key.split(":", 2);
 

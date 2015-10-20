@@ -28,6 +28,9 @@ public class Profile {
 		fileName = "participants.properties";
 
 		try {
+			
+			// Load all details from participants file into ArrayLists
+			
 			input = new FileInputStream("participants.properties");
 			properties.load(input);
 			input.close();
@@ -57,8 +60,5 @@ public class Profile {
 	}
 
 
-	public static ArrayList<String> getAddresses() {
-		return IP;
-	}
 
 }
